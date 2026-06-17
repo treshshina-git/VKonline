@@ -67,10 +67,10 @@ async def get_online_categories(
     url = f"{APIDEV_BASE_URL}/v1/catalog/online_categories"
     #params = {"limit": int(limit), "offset": int(offset)}
     params={
-            "limit": 30,
+            "limit": limit,
             #"query": "",
             #"type": ""
-            "offset": 0,
+            "offset": offset,
             "category_type": "irl",
             #"has_vk_video": False,
             #"all_streams": True
@@ -86,7 +86,11 @@ async def get_online_categories(
     print(f"Extracted categories: {cats}")  # Debug print
     if not isinstance(cats, list):
         raise RuntimeError(f"Unexpected categories payload: {data}")
-    return cats
+    if not cats:
+        print("No categories found in response.")
+    else:
+        print(f"Found {len(cats)} categories.")
+        return cats
 
 
 async def get_online_channels(
