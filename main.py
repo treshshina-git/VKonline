@@ -212,7 +212,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     category_type = parts[1]
     category_id = parts[2]
-
+    print(category_id, category_type)
     # ТЗ: limit <= 200
     limit = int(context.bot_data.get("channels_limit", 50))
     if limit > 200:
