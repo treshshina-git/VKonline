@@ -202,16 +202,16 @@ async def show_categories(query, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, cb: str) -> None:
     # cb: cat|category_type|category_id
-    #parts = cb.split("|", 2)
-    print(query)
-    category_type = "irl" 
-    category_id = "6abff723-68ea-4c47-8df1-55573d362749"
-    if category_id is None:
+    parts = cb.split("|", 2)
+    print(parts)
+    #category_type = "irl" 
+    #category_id = "6abff723-68ea-4c47-8df1-55573d362749"
+    if parts is None:
         await query.message.reply_text("Некорректные данные категории.")
         return
 
-    #category_type = parts[1]
-    #category_id = parts[2]
+    category_type = parts[1]
+    category_id = parts[2]
 
     # ТЗ: limit <= 200
     limit = int(context.bot_data.get("channels_limit", 50))
