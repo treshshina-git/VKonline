@@ -187,7 +187,7 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 async def show_categories(query, context: ContextTypes.DEFAULT_TYPE) -> None:
     limit = int(context.bot_data.get("categories_limit", 10))
     offset = int(context.bot_data.get("categories_offset", 0))
-
+    print(f"Showing categories with limit={limit} and offset={offset}")  # Debug print
     async with httpx.AsyncClient() as client:
         token = await fetch_token(client)
         categories = await get_online_categories(client, token, limit=limit, offset=offset)
