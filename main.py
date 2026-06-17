@@ -36,13 +36,6 @@ def trim_30(s: Any) -> str:
 
 
 async def fetch_token(client: httpx.AsyncClient) -> str:
-    # ТЗ: credentials VK_CLIENT_ID / VK_CLIENT_SECRET / TOKEN_VK_URL.
-    # Формат может зависеть от API, поэтому отправляем в виде query params.
-    # Если API требует body, меняем место отправки.
-    #params = {
-    #    "client_id": VK_CLIENT_ID,
-    #    "client_secret": VK_CLIENT_SECRET,
-    #}
     credentials = f"{VK_CLIENT_ID}:{VK_CLIENT_SECRET}"
     encoded = base64.b64encode(
         credentials.encode()
@@ -56,10 +49,9 @@ async def fetch_token(client: httpx.AsyncClient) -> str:
         data={"grant_type": "client_credentials"},
         timeout=30
     )
-       
     r.raise_for_status()
     data = r.json()
-
+    print(f"Fetched token response: {data}")  # Debug print
     token = data.get("access_token") or data.get("token") or data.get("accessToken")
     if not token:
         raise RuntimeError(f"Token not found in response: {data}")
@@ -73,8 +65,18 @@ async def get_online_categories(
     offset: int = 0,
 ) -> List[Dict[str, Any]]:
     url = f"{APIDEV_BASE_URL}/v1/catalog/online_categories"
-    params = {"limit": int(limit), "offset": int(offset)}
-
+    #params = {"limit": int(limit), "offset": int(offset)}
+    params={
+            "limit": 30,
+            #"query": "",
+            #"type": ""
+            "offset": 0,
+            "category_type": "irl",
+            #"has_vk_video": False,
+            #"all_streams": True
+        }
+    print(f"Requesting categories with params: {params}")  # Debug print
+    
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
     data = r.json()
