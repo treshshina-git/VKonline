@@ -11,7 +11,7 @@ from telegram.ext import Application, CallbackQueryHandler, CommandHandler, Cont
 
 logger = logging.getLogger(__name__)
 
- 
+print("Starting bot...") 
 def _env(name: str, default: Optional[str] = None) -> str:
     v = os.getenv(name, default)
     if v is None or v == "":
