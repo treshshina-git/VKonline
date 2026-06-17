@@ -33,14 +33,13 @@ class Settings:
 
 def load_settings() -> Settings:
     return Settings(
-        telegram_bot_token=_get("TELEGRAM_BOT_TOKEN"),
-        api_base_url=_get("API_BASE_URL", "https://apidev.live.vkvideo.ru"),
-        vk_oauth_token_url=_get("VK_OAUTH_TOKEN_URL", "https://api.live.vkvideo.ru/oauth/server/token"),
-        vk_client_id=_get("VK_CLIENT_ID"),
-        vk_client_secret=_get("VK_CLIENT_SECRET"),
-        vk_redirect_uri=_get("VK_REDIRECT_URI", ""),
-        vk_access_token=_get("VK_ACCESS_TOKEN", ""),
+        telegram_bot_token=os.getenv("TELEGRAM_BOT_TOKEN"),
+        api_base_url=os.getenv("API_BASE_URL", "https://apidev.live.vkvideo.ru"),
+        vk_oauth_token_url=os.getenv("VK_OAUTH_TOKEN_URL", "https://api.live.vkvideo.ru/oauth/server/token"),
+        vk_client_id=os.getenv("VK_CLIENT_ID"),
+        vk_client_secret=os.getenv("VK_CLIENT_SECRET"),
+        vk_redirect_uri=os.getenv("VK_REDIRECT_URI", ""),
+        vk_access_token=os.getenv("VK_ACCESS_TOKEN", ""),
 
         request_timeout_seconds=int(os.getenv("REQUEST_TIMEOUT_SECONDS", "20")),
     )
-
