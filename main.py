@@ -206,7 +206,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
     print(query)
     category_type = "irl" 
     category_id = "6abff723-68ea-4c47-8df1-55573d362749"
-    if len(parts) != 3:
+    if len(category_id) != 3:
         await query.message.reply_text("Некорректные данные категории.")
         return
 
