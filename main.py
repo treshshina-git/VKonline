@@ -48,16 +48,16 @@ async def fetch_token(client: httpx.AsyncClient) -> str:
     encoded = base64.b64encode(
         credentials.encode()
     ).decode()
-    r = requests.post(
+    r = await client.post(
         TOKEN_VK_URL,
         headers={
-            "Authorization": f"Basic {encoded}",
+            "Authorization": f"Basic {encoded}",   
             "Content-Type": "application/x-www-form-urlencoded"
         },
         data={"grant_type": "client_credentials"},
         timeout=30
     )
-    
+       
     r.raise_for_status()
     data = r.json()
 
