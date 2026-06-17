@@ -78,6 +78,7 @@ async def get_online_categories(
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
     data = r.json()
+    print(f"Fetched categories data: {data}")  # Debug print
     # Ожидаем список в одном из стандартных ключей
     cats = data.get("items") or data.get("categories") or data
     if not isinstance(cats, list):
