@@ -39,12 +39,24 @@ async def fetch_token(client: httpx.AsyncClient) -> str:
     # ТЗ: credentials VK_CLIENT_ID / VK_CLIENT_SECRET / TOKEN_VK_URL.
     # Формат может зависеть от API, поэтому отправляем в виде query params.
     # Если API требует body, меняем место отправки.
-    params = {
-        "client_id": VK_CLIENT_ID,
-        "client_secret": VK_CLIENT_SECRET,
-    }
-
-    r = await client.get(TOKEN_VK_URL, params=params, timeout=30)
+    #params = {
+    #    "client_id": VK_CLIENT_ID,
+    #    "client_secret": VK_CLIENT_SECRET,
+    #}
+    credentials = f"{VK_CLIENT_ID}:{VK_CLIENT_SECRET}"
+    encoded = base64.b64encode(
+        credentials.encode()
+    ).decode()
+    r = requests.post(
+        TOKEN_VK_URL,
+        headers={
+            "Authorization": f"Basic {encoded}",
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data={"grant_type": "client_credentials"},
+        timeout=30
+    )
+    
     r.raise_for_status()
     data = r.json()
 
