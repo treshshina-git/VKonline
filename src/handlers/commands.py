@@ -4,7 +4,14 @@ from typing import Any, Dict, List
 
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from aiogram.types import (
+    CallbackQuery,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+)
 
 from src.services.api_client import ApiClient
 
@@ -47,11 +54,24 @@ def _build_keyboard(items: List[Dict[str, Any]]) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
-@router.message(Command("gogogogo"))
-async def cmd_gogogo(message: Message, api: ApiClient):
-    await message.answer("Ищу активные категории...")
+def _start_keyboard() -> ReplyKeyboardMarkup:
+    # Reply-кнопка "Start" (без обязательного /start)
+    return ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="Start")]],
+        resize_keyboard=True,
+        one_time_keyboard=False,
+    )
 
-    categories = await api.fetch_active_positions_list()
+
+async def _send_categories(message: Message, api: ApiClient) -> None:
+    await message.answer("Ищу активные категории...", reply_markup=_start_keyboard())
+
+    try:
+        categories = await api.fetch_active_positions_list()
+    except Exception as e:
+        await message.answer(f"Ошибка при загрузке категорий: {e}")
+        return
+
     if not categories:
         await message.answer("Категорий нет.")
         return
@@ -60,22 +80,42 @@ async def cmd_gogogo(message: Message, api: ApiClient):
     await message.answer("Выберите категорию:", reply_markup=kb)
 
 
+@router.message(Command("start"))
+async def cmd_start(message: Message, api: ApiClient):
+    await _send_categories(message, api)
+
+
+@router.message(Command("gogogogo"))
+async def cmd_gogogo(message: Message, api: ApiClient):
+    # Alias
+    await _send_categories(message, api)
+
+
+@router.message(F.text == "Start")
+async def cmd_start_button(message: Message, api: ApiClient):
+    await _send_categories(message, api)
+
+
 @router.callback_query(F.data.startswith("pos:"))
 async def on_position_click(callback: CallbackQuery, api: ApiClient):
     category_id = callback.data.split(":", 1)[1]
     await callback.answer()
 
-    await callback.message.answer("Загружаю каналы...")
+    await callback.message.answer("Загружаю содержимое категории...")
 
-    detail = await api.fetch_position_detail(category_id)
+    try:
+        detail = await api.fetch_position_detail(category_id)
+    except Exception as e:
+        await callback.message.answer(f"Ошибка при загрузке категории: {e}")
+        return
 
     # online_channels => {"data": {"channels": [ {"channel": {...}, "stream": {...}} ]}}
     channels = detail.get("data", {}).get("channels") if isinstance(detail, dict) else None
     if not isinstance(channels, list) or not channels:
-        await callback.message.answer("Каналы не найдены.")
+        await callback.message.answer("Содержимое не найдено.")
         return
 
-    lines: List[str] = [f"<b>Активные позиции</b> (категория: {category_id})"]
+    lines: List[str] = [f"<b>Содержимое категории</b> (категория: {category_id})"]
 
     for item in channels:
         channel = item.get("channel") if isinstance(item, dict) else None
