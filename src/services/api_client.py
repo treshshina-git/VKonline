@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import base64
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-import aiohttp
+import httpx
 
 from src.config import Settings
 
@@ -20,10 +21,6 @@ class ApiClient:
         self.settings = settings
         self._token: Optional[ApiToken] = None
 
-    async def _get_session(self) -> aiohttp.ClientSession:
-        timeout = aiohttp.ClientTimeout(total=self.settings.request_timeout_seconds)
-        return aiohttp.ClientSession(timeout=timeout)
-
     async def get_vk_api_token(self) -> str:
         """Получает токен для доступа к API.
 
@@ -34,8 +31,6 @@ class ApiClient:
         now = time.time()
         if self._token and self._token.expires_at - 30 > now:
             return self._token.value
-
-        import base64
 
         credentials = f"{self.settings.vk_client_id}:{self.settings.vk_client_secret}"
         encoded = base64.b64encode(credentials.encode()).decode()
@@ -49,14 +44,14 @@ class ApiClient:
             "Content-Type": "application/x-www-form-urlencoded",
         }
 
-        async with await self._get_session() as session:
-            async with session.post(
+        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+            resp = await client.post(
                 self.settings.vk_oauth_token_url,
                 data=payload,
                 headers=headers,
-            ) as resp:
-                resp.raise_for_status()
-                data = await resp.json()
+            )
+            resp.raise_for_status()
+            data = resp.json()
 
 
         token_value = (
@@ -92,10 +87,10 @@ class ApiClient:
         path = "/v1/catalog/active_channels"
         headers = {"Authorization": f"Bearer {token}"}
 
-        async with await self._get_session() as session:
-            async with session.get(f"{self.settings.api_base_url}{path}", headers=headers) as resp:
-                resp.raise_for_status()
-                data = await resp.json()
+        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+            resp = await client.get(f"{self.settings.api_base_url}{path}", headers=headers)
+            resp.raise_for_status()
+            data = resp.json()
 
         if not isinstance(data, dict):
             raise RuntimeError(f"Unexpected list response format: {data}")
@@ -133,14 +128,14 @@ class ApiClient:
         }
 
 
-        async with await self._get_session() as session:
-            async with session.get(
+        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+            resp = await client.get(
                 f"{self.settings.api_base_url}{path}",
                 headers=headers,
                 params=params,
-            ) as resp:
-                resp.raise_for_status()
-                data = await resp.json()
+            )
+            resp.raise_for_status()
+            data = resp.json()
 
         if not isinstance(data, dict):
             raise RuntimeError(f"Unexpected detail response format: {data}")
