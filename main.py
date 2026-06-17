@@ -75,16 +75,14 @@ async def get_online_categories(
             #"has_vk_video": False,
             #"all_streams": True
         }
-    print(f"Requesting categories with params: {params}")  # Debug print
-    
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
     data = r.json()
     print(f"Fetched categories data: {data}")  # Debug print
-    data = data.get("data").get("categories") 
+    data = data.get("data") 
     print(f"Extracted categories field: {data}")  # Debug print
     # Ожидаем список в одном из стандартных ключей
-    cats = data.get("id")
+    cats = data.get("id").get("categories")
     print(f"Extracted categories: {cats}")  # Debug print
     if not isinstance(cats, list):
         raise RuntimeError(f"Unexpected categories payload: {data}")
@@ -103,13 +101,14 @@ async def get_online_channels(
     all_streams: bool = False,
 ) -> List[Dict[str, Any]]:
     url = f"{APIDEV_BASE_URL}/v1/catalog/online_channels"
-    params = {
-        "limit": int(limit),
-        "offset": int(offset),
-        "category_id": str(category_id),
-        "category_type": str(category_type),
-        "has_vk_video": bool(has_vk_video),
-        "all_streams": bool(all_streams),
+    params={
+            "limit": 50,
+            "offset": 0,
+            "category_id": section_id,
+            "all_streams": True,
+            "has_vk_video": False,
+            "category_type": "irl",
+            "all_streams": True,
     }
 
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
