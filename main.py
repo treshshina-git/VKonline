@@ -78,8 +78,9 @@ async def get_online_categories(
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
     datar = r.json()
-    print(f"Fetched categories data: {data}")  # Debug print
+    print(f"Fetched categories data: {datar}")  # Debug print
     data = datar.get("categories")
+    print(f"Extracted categories field: {data}")  # Debug print
     # Ожидаем список в одном из стандартных ключей
     cats = data.get("id")
     print(f"Extracted categories: {cats}")  # Debug print
