@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import base64
+import base64, requests
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 import httpx
 
-from src.config import Settings
+from src.config import Settings, _env
 
 
 @dataclass
@@ -22,11 +22,19 @@ class ApiClient:
         self._token: Optional[ApiToken] = None
 
     async def get_vk_api_token(self) -> str:
-        """Получает токен для доступа к API.
-
-        ВАЖНО: вам нужно подставить параметры в запрос к VK_OAUTH_TOKEN_URL так,
-        как ожидает ваш endpoint.
-        """
+        credentials = f"{_env("VK_CLIENT_ID")}:{_env("VK_CLIENT_SECRET")}"
+        encoded = base64.b64encode(
+        credentials.encode()
+    ).decode()
+        r = requests.post(
+        {_env("TOKEN_VK_URL")},
+        headers={
+            "Authorization": f"Basic {encoded}",
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data={"grant_type": "client_credentials"},
+        timeout=30
+        )
 
         now = time.time()
         if self._token and self._token.expires_at - 30 > now:
@@ -84,7 +92,7 @@ class ApiClient:
         }
         """
         token = await self.get_vk_api_token()
-        path = "/v1/catalog/active_channels"
+        path = "/v1/catalog/online_categories"
         headers = {"Authorization": f"Bearer {token}"}
 
         async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
@@ -140,6 +148,3 @@ class ApiClient:
         if not isinstance(data, dict):
             raise RuntimeError(f"Unexpected detail response format: {data}")
         return data
-
-
-
