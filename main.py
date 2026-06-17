@@ -77,10 +77,12 @@ async def get_online_categories(
 
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
-    data = r.json()
+    datar = r.json()
     print(f"Fetched categories data: {data}")  # Debug print
+    data = datar.get("categories")
     # Ожидаем список в одном из стандартных ключей
-    cats = data.get("items") or data.get("categories") or data
+    cats = data.get("id")
+    print(f"Extracted categories: {cats}")  # Debug print
     if not isinstance(cats, list):
         raise RuntimeError(f"Unexpected categories payload: {data}")
     return cats
