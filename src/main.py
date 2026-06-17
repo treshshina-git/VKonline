@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import asyncio
 import logging
+
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
