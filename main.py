@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os, base64
+import requests
 from typing import Any, Dict, List, Optional, Tuple
  
 import httpx
