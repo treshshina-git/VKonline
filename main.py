@@ -79,10 +79,10 @@ async def get_online_categories(
     r.raise_for_status()
     data = r.json()
     print(f"Fetched categories data: {data}")  # Debug print
-    data = data.get("data") 
+    datas = data.get("data") 
     print(f"Extracted categories field: {data}")  # Debug print
     # Ожидаем список в одном из стандартных ключей
-    cats = data.get("id").get("categories")
+    cats = datas.get("categories")
     print(f"Extracted categories: {cats}")  # Debug print
     if not isinstance(cats, list):
         raise RuntimeError(f"Unexpected categories payload: {data}")
