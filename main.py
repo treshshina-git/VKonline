@@ -270,16 +270,19 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         stream_info = ch.get("stream").get("title")
         viewers = ch.get("stream").get("counters").get("viewers")
         line = f"{viewers} |    <b>{name}</b>\n"
+        if ch_id is not None:
+            urik = "https://live.vkvideo.ru/" + ch_id
+            #line += " -> <a href=\"" + urik + "\" >URL</a>"
+        else:
+            urik = "https://live.vkvideo.ru/"
         if stream_info:
             stream_info = str(stream_info)
             # не делаем огромные сообщения
             if len(stream_info) > 120:
                 stream_info = stream_info[:117] + "..."
-            line += f" <i>{stream_info}</i> "
+            line += f" <a href=\"" + urik + "\" > {stream_info}</a> "
 
-        if ch_id is not None:
-            urik = "https://live.vkvideo.ru/" + ch_id
-            line += " -> <a href=\"" + urik + "\" >URL</a>"
+
     
         lines.append(line)
 
