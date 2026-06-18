@@ -265,7 +265,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     text = "\n".join(lines)
     print(text)
-    await query.message.reply_text(text, reply_markup=keyboard)
+    await query.message.reply_text(text)
     return InlineKeyboardMarkup(text)
 
 
