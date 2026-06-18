@@ -173,13 +173,17 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     await query.answer()
 
     cb = query.data or ""
+    loading_text = None
+
     if cb == "show_categories":
-        await query.edit_message_text("Загружаю категории...")
+        loading_text = "Загружаю категории..."
+        await query.edit_message_text(loading_text)
         await show_categories(query, context)
         return
 
     if cb == "back_to_categories":
-        await query.edit_message_text("Возвращаю категории...")
+        loading_text = "Возвращаю категории..."
+        await query.edit_message_text(loading_text)
         await show_categories(query, context)
         return
 
@@ -187,16 +191,19 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         # refresh_channels|cat|{category_type}|{category_id}
         payload = cb.split("|", 1)[1] if "|" in cb else ""
         if payload.startswith("cat|"):
-            await query.edit_message_text("Обновляю каналы...")
+            loading_text = "Обновляю каналы..."
+            await query.edit_message_text(loading_text)
             await show_channels_for_category(query, context, payload)
             return
 
     if cb.startswith("cat|"):
-        await query.edit_message_text("Загружаю каналы...")
+        loading_text = "Загружаю каналы..."
+        await query.edit_message_text(loading_text)
         await show_channels_for_category(query, context, cb)
         return
 
     await query.edit_message_text("Неизвестная команда.")
+
 
 
 
