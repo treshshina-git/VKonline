@@ -20,8 +20,8 @@ VK_CLIENT_ID = _env("VK_CLIENT_ID")
 VK_CLIENT_SECRET = _env("VK_CLIENT_SECRET")
 TOKEN_VK_URL = _env("TOKEN_VK_URL")
 APIDEV_BASE_URL = os.getenv("APIDEV_BASE_URL", "https://apidev.live.vkvideo.ru/").rstrip("/")
-
-
+cat_lim = _env("categories_limit")
+chan_lim = _env("channels_limit")
 BOT_TOKEN = _env("BOT_TOKEN")
 
 
@@ -347,9 +347,9 @@ def main() -> None:
     application.add_error_handler(error_handler)
 
     # Параметры по умолчанию.
-    application.bot_data["categories_limit"] = 10
+    application.bot_data["categories_limit"] = cat_lim
     application.bot_data["categories_offset"] = 0
-    application.bot_data["channels_limit"] = 10
+    application.bot_data["channels_limit"] = chan_lim
     application.bot_data["channels_offset"] = 0
 
     application.run_polling(close_loop=False)
