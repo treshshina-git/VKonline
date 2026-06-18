@@ -274,9 +274,9 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     # base URL вашего webapp (должен быть https)
     WEBAPP_BASE_URL = "https://vkonline-production.up.railway.app"
-
+    #print(text)
     # Вырежем HTML-теги, чтобы не было «полузакликаных» ссылок
-    text = text.replace("<a ", "").replace("</a>", "")
+    #text = text.replace("<a ", "").replace("</a>", "")
 
     import urllib.parse
 
@@ -293,6 +293,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
         urik = "https://live.vkvideo.ru/" + ch_id
         encoded_urik = urllib.parse.quote(urik, safe="")
+        print(encoded_urik)
         webapp_url = f"{WEBAPP_BASE_URL}/?play=1&urik={encoded_urik}"
         print(webapp_url)
 
