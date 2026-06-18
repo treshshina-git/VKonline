@@ -312,7 +312,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             InlineKeyboardButton(text=name or "Канал")
         )
 
-        if (i + 1) % per_row == 0:
+        if (i == 0):
             channel_buttons.append(current_row)
             current_row = []
 
