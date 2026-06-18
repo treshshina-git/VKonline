@@ -263,7 +263,10 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
                 ]
             ]
         )
-        await query.message.reply_text("Каналы по этой категории не найдены.")
+        await query.message.reply_text(
+            "Каналы по этой категории не найдены.", 
+            reply_markup=keyboard,
+        )
         return
 
 
@@ -318,7 +321,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             ]
         ]
     )
-    text = "123"
+    text = "Каналы:"
     await query.message.reply_text(
         text,
         reply_markup=keyboard,
