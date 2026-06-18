@@ -70,7 +70,7 @@ async def get_online_categories(
             #"query": "",
             #"type": ""
             "offset": offset,
-            "category_type": "irl, sport",
+            "category_type": "irl, sport, game",
             #"has_vk_video": False,
             #"all_streams": True
         }
@@ -111,7 +111,7 @@ async def get_online_channels(
         "category_id": category_id,
         "all_streams": True,
         "has_vk_video": False,
-        "category_type": "irl, sport",
+        "category_type": "irl, sport, game",
         "all_streams": True,
     }
 
