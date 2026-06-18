@@ -178,12 +178,26 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await show_categories(query, context)
         return
 
+    if cb == "back_to_categories":
+        await query.edit_message_text("Возвращаю категории...")
+        await show_categories(query, context)
+        return
+
+    if cb.startswith("refresh_channels|"):
+        # refresh_channels|cat|{category_type}|{category_id}
+        payload = cb.split("|", 1)[1] if "|" in cb else ""
+        if payload.startswith("cat|"):
+            await query.edit_message_text("Обновляю каналы...")
+            await show_channels_for_category(query, context, payload)
+            return
+
     if cb.startswith("cat|"):
         await query.edit_message_text("Загружаю каналы...")
         await show_channels_for_category(query, context, cb)
         return
 
     await query.edit_message_text("Неизвестная команда.")
+
 
 
 async def show_categories(query, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -264,11 +278,24 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     text = "\n".join(lines)
     print(text)
-    await query.message.reply_text(text,
+    refresh_payload = f"refresh_channels|{cb}"
+    keyboard = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(text="Назад", callback_data="back_to_categories"),
+                InlineKeyboardButton(text="Обновить", callback_data=refresh_payload),
+            ]
+        ]
+    )
+
+    await query.message.reply_text(
+        text,
+        reply_markup=keyboard,
         disable_web_page_preview=True,
-        parse_mode="HTML"
+        parse_mode="HTML",
     )
     #return InlineKeyboardMarkup(text)
+
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
