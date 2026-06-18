@@ -294,7 +294,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
         urik = "https://live.vkvideo.ru/" + ch_id
         #encoded_urik = urllib.parse.quote(urik, safe="")
-        print(encoded_urik)
+        #print(encoded_urik)
         webapp_url = f"{WEBAPP_BASE_URL}/?play=1&urik={urik}"
         print(webapp_url)
 
