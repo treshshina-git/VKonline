@@ -133,7 +133,7 @@ def build_categories_keyboard(categories: List[Dict[str, Any]]) -> InlineKeyboar
 
     # Кнопок в ряд не более ~3-4, чтобы UI был читабельнее.
     per_row = 2
-
+    print(categories)
     for i, c in enumerate(categories):
         name = trim_30(c.get("name") or c.get("title") or c.get("category_name") or "Категория")
         category_id = str(c.get("category_id") or c.get("id") or "")
@@ -264,6 +264,10 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         lines.append(line)
 
     text = "\n".join(lines)
+    keyboard = get_online_channels(channels)
+    if not keyboard.inline_keyboard:
+        await query.message.reply_text("Стримы не найдены.")
+        return
     await query.message.reply_text(text, reply_markup=keyboard)
 
 
