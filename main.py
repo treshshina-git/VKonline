@@ -1,8 +1,7 @@
-import json
 import logging
 import os, base64
 from typing import Any, Dict, List, Optional, Tuple
- 
+
 import httpx
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
@@ -265,7 +264,10 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     text = "\n".join(lines)
     print(text)
-    await query.message.reply_text(text)
+    await query.message.reply_text(text,
+        disable_web_page_preview=True,
+        parse_mode="HTML"
+    )
     #return InlineKeyboardMarkup(text)
 
 
