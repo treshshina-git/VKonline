@@ -261,32 +261,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         await query.message.reply_text("Каналы по этой категории не найдены.")
         return
 
-    # Форматируем обычным сообщением (без кнопок).
-    lines: List[str] = []
-    for idx, ch in enumerate(channels, start=1):
-        # Пытаемся угадать поля.
-        name = trim_30(ch.get("channel").get("nick"))
-        ch_id = ch.get("channel").get("url")
-        stream_info = trim_30(ch.get("stream").get("title"))
-        viewers = ch.get("stream").get("counters").get("viewers")
-        line = f"{viewers} |    <b>{name}</b>\n"
-        # для web app будем открывать /play?urik=<ch_id> внутри Telegram
-        if ch_id is not None:
-            urik = "https://live.vkvideo.ru/" + ch_id
-        else:
-            urik = "https://live.vkvideo.ru/"
 
-        if stream_info:
-            stream_info = str(stream_info)
-            if len(stream_info) > 120:
-                stream_info = stream_info[:117] + "..."
-            line += f"\n{stream_info}"
-
-        lines.append(line)
-
-
-    text = "\n".join(lines)
-    #print(text)
     refresh_payload = f"refresh_channels|{cb}"
     keyboard = InlineKeyboardMarkup(
         [
@@ -319,6 +294,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         urik = "https://live.vkvideo.ru/" + ch_id
         encoded_urik = urllib.parse.quote(urik, safe="")
         webapp_url = f"{WEBAPP_BASE_URL}/?play=1&urik={encoded_urik}"
+        print(webapp_url)
 
         current_row.append(
             InlineKeyboardButton(text=name or "Канал", web_app={"url": webapp_url})
