@@ -255,7 +255,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             has_vk_video=True,
             all_streams=False,
         )
-        print(channels)
+        #print(channels)
 
     if not channels:
         await query.message.reply_text("Каналы по этой категории не найдены.")
@@ -269,22 +269,22 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         ch_id = ch.get("channel").get("url")
         stream_info = ch.get("stream").get("title")
         viewers = ch.get("stream").get("counters").get("viewers")
-        line = f"{idx}. {name}"
+        line = f"{idx}. <b>{name}</b>"
         if stream_info:
             stream_info = str(stream_info)
             # не делаем огромные сообщения
             if len(stream_info) > 120:
                 stream_info = stream_info[:117] + "..."
-            line += f" — {stream_info} - {viewers}"
+            line += f" — {stream_info} -> {viewers} <- "
 
         if ch_id is not None:
             urik = "https://live.vkvideo.ru/" + ch_id
-            line += " -> " + urik
+            line += " 🤥 " + urik
     
         lines.append(line)
 
     text = "\n".join(lines)
-    print(text)
+    #print(text)
     refresh_payload = f"refresh_channels|{cb}"
     keyboard = InlineKeyboardMarkup(
         [
