@@ -261,7 +261,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             urik = "https://live.vkvideo.ru/" + ch_id
             line += " -> " + urik
     
-    lines = "\n".join(line)
+        lines = "\n".join(line)
     print(lines)
     await query.message.reply_text(lines)
     #return InlineKeyboardMarkup(text)
