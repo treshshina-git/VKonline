@@ -269,7 +269,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         li = json.dumps(lin)
         print(li)
         keyboard = [
-        [InlineKeyboardButton( f"{lin}")]
+        [InlineKeyboardButton( f"{li}")]
         ]
         lines.append(line)
 
