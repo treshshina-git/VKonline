@@ -256,7 +256,6 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         #print(channels)
 
     if not channels:
-        await query.message.reply_text("Каналы по этой категории не найдены.")
         keyboard = InlineKeyboardMarkup(
             [
                 [
@@ -264,6 +263,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
                 ]
             ]
         )
+        await query.message.reply_text("Каналы по этой категории не найдены.")
         return
 
 
