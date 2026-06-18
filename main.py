@@ -267,7 +267,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         # Пытаемся угадать поля.
         name = trim_30(ch.get("channel").get("nick"))
         ch_id = ch.get("channel").get("url")
-        stream_info = ch.get("stream").get("title")
+        stream_info = trim_30(ch.get("stream").get("title"))
         viewers = ch.get("stream").get("counters").get("viewers")
         line = f"{viewers} |    <b>{name}</b>\n"
         if ch_id is not None:
