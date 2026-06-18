@@ -295,7 +295,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
    
 
     # Кнопок в ряд не более ~3-4, чтобы UI был читабельнее.
-    per_row = 2
+
     for ch in channels:
         ch_id = ch.get("channel").get("url")
         name = trim_30(ch.get("channel").get("nick"))
@@ -309,10 +309,12 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         print(webapp_url)
 
         current_row.append(
-            InlineKeyboardButton(text=name or "Канал")
+            InlineKeyboardButton(text=name or "Канал", web_app={"url": webapp_url})
         )
 
-        
+        # 1 кнопка в строке (чтобы не упираться в лимиты Telegram)
+        channel_buttons.append(current_row)
+        current_row = []
 
     keyboard = InlineKeyboardMarkup(
         channel_buttons + [
@@ -322,6 +324,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             ]
         ]
     )
+
     text = "Каналы:"
     await query.message.reply_text(
         text,
