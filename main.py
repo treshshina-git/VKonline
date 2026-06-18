@@ -248,25 +248,27 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         name = trim_30(ch.get("channel").get("nick"))
         ch_id = ch.get("channel").get("url")
         stream_info = ch.get("stream").get("title")
-
+        viewers = ch.get("stream").get("counters").get("viewers")
         line = f"{idx}. {name}"
         if stream_info:
             stream_info = str(stream_info)
             # не делаем огромные сообщения
             if len(stream_info) > 120:
                 stream_info = stream_info[:117] + "..."
-            line += f" — {stream_info}"
+            line += f" — {stream_info} - {viewers}"
 
         if ch_id is not None:
             urik = "https://live.vkvideo.ru/" + ch_id
             line += " -> " + urik
-
+        keyboard = [
+        [InlineKeyboardButton( f"{line}")]
+        ]
         lines.append(line)
 
     text = "\n".join(lines)
     print(text)
-    await query.message.reply_text(text)
-    return InlineKeyboardMarkup(text)
+    await query.message.reply_text(text, keyboard)
+    #return InlineKeyboardMarkup(text)
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
