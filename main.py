@@ -1,4 +1,4 @@
-import asyncio
+import json
 import logging
 import os, base64
 from typing import Any, Dict, List, Optional, Tuple
@@ -266,7 +266,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         "stream_name": stream_info,
         "viewers": viewers
         }
-        li = lin.json()
+        li = json.dumps(lin)
         print(li)
         keyboard = [
         [InlineKeyboardButton( f"{lin}")]
