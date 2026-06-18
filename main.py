@@ -119,7 +119,9 @@ async def get_online_channels(
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
     data = r.json()
-    chans = data.get("items") or data.get("channels") or data
+    print(data)
+    chans = data.get("data").get("channels")
+    print(chans)
     if not isinstance(chans, list):
         raise RuntimeError(f"Unexpected channels payload: {data}")
     return chans
