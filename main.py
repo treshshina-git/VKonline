@@ -309,7 +309,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         print(webapp_url)
 
         current_row.append(
-            InlineKeyboardButton(text=name or "Канал", web_app={"url": webapp_url})
+            InlineKeyboardButton(text=name or "Канал")
         )
 
         # 1 кнопка в строке (чтобы не упираться в лимиты Telegram)
