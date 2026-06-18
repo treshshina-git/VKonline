@@ -296,7 +296,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     # Кнопок в ряд не более ~3-4, чтобы UI был читабельнее.
     per_row = 2
-    for i, ch in channels:
+    for i, ch in enumerate(channels):
         ch_id = ch.get("channel").get("url")
         name = trim_30(ch.get("channel").get("nick"))
         if not ch_id:
