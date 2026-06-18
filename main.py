@@ -51,7 +51,7 @@ async def fetch_token(client: httpx.AsyncClient) -> str:
     )
     r.raise_for_status()
     data = r.json()
-    print(f"Fetched token response: {data}")  # Debug print
+    #print(f"Fetched token response: {data}")  # Debug print
     token = data.get("access_token") or data.get("token") or data.get("accessToken")
     if not token:
         raise RuntimeError(f"Token not found in response: {data}")
@@ -78,12 +78,12 @@ async def get_online_categories(
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
     data = r.json()
-    print(f"Fetched categories data: {data}")  # Debug print
+    #print(f"Fetched categories data: {data}")  # Debug print
     datas = data.get("data") 
-    print(f"Extracted categories field: {data}")  # Debug print
+    #print(f"Extracted categories field: {data}")  # Debug print
     # Ожидаем список в одном из стандартных ключей
     cats = datas.get("categories")
-    print(f"Extracted categories: {cats}")  # Debug print
+    #print(f"Extracted categories: {cats}")  # Debug print
     if not isinstance(cats, list):
         raise RuntimeError(f"Unexpected categories payload: {data}")
     if not cats:
@@ -119,9 +119,9 @@ async def get_online_channels(
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     r.raise_for_status()
     data = r.json()
-    print(data)
+    #print(data)
     chans = data.get("data").get("channels")
-    print(chans)
+    #print(chans)
     if not isinstance(chans, list):
         raise RuntimeError(f"Unexpected channels payload: {data}")
     return chans
@@ -133,7 +133,7 @@ def build_categories_keyboard(categories: List[Dict[str, Any]]) -> InlineKeyboar
 
     # Кнопок в ряд не более ~3-4, чтобы UI был читабельнее.
     per_row = 2
-    print(categories)
+    #print(categories)
     for i, c in enumerate(categories):
         name = trim_30(c.get("name") or c.get("title") or c.get("category_name") or "Категория")
         category_id = str(c.get("category_id") or c.get("id") or "")
@@ -190,7 +190,7 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 async def show_categories(query, context: ContextTypes.DEFAULT_TYPE) -> None:
     limit = int(context.bot_data.get("categories_limit", 10))
     offset = int(context.bot_data.get("categories_offset", 0))
-    print(f"Showing categories with limit={limit} and offset={offset}")  # Debug print
+    #print(f"Showing categories with limit={limit} and offset={offset}")  # Debug print
     async with httpx.AsyncClient() as client:
         token = await fetch_token(client)
         categories = await get_online_categories(client, token, limit=limit, offset=offset)
@@ -206,7 +206,7 @@ async def show_categories(query, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, cb: str) -> None:
     # cb: cat|category_type|category_id
     parts = cb.split("|", 2)
-    print(parts)
+    #print(parts)
     #category_type = "irl" 
     #category_id = "6abff723-68ea-4c47-8df1-55573d362749"
     if parts is None:
@@ -215,7 +215,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     category_type = parts[1]
     category_id = parts[2]
-    print(category_id, category_type)
+    #print(category_id, category_type)
     # ТЗ: limit <= 200
     limit = int(context.bot_data.get("channels_limit", 50))
     if limit > 200:
@@ -264,11 +264,9 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         lines.append(line)
 
     text = "\n".join(lines)
-    keyboard = get_online_channels(channels)
-    if not keyboard.inline_keyboard:
-        await query.message.reply_text("Стримы не найдены.")
-        return
+    print(text)
     await query.message.reply_text(text, reply_markup=keyboard)
+    return InlineKeyboardMarkup(text)
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
