@@ -220,7 +220,7 @@ async def show_categories(query, context: ContextTypes.DEFAULT_TYPE) -> None:
         await query.message.reply_text("Категории не найдены.")
         return
 
-    await query.message.reply_text("Выберите категорию:", reply_markup=keyboard)
+    await query.edit_message_text("Выберите категорию:", reply_markup=keyboard)
 
 
 async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, cb: str) -> None:
