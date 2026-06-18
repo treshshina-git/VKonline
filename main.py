@@ -275,11 +275,11 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             # не делаем огромные сообщения
             if len(stream_info) > 120:
                 stream_info = stream_info[:117] + "..."
-            line += f" — {stream_info} -> {viewers} <- "
+            line += f" — {stream_info} - {viewers}"
 
         if ch_id is not None:
             urik = "https://live.vkvideo.ru/" + ch_id
-            line += " " + urik
+            line += " -> " + urik
     
         lines.append(line)
 
@@ -295,7 +295,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         ]
     )
 
-    await query.edit_message_text(
+    await query.message.reply_text(
         text,
         reply_markup=keyboard,
         disable_web_page_preview=True,
