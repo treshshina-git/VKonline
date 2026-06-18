@@ -260,7 +260,14 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         if ch_id is not None:
             urik = "https://live.vkvideo.ru/" + ch_id
             line += " -> " + urik
-        lin = line.json()
+        lin = {
+        "channel_name": name,
+        "url": ch_id,
+        "stream_name": stream_info,
+        "viewers": viewers
+        }
+        li = lin.json()
+        print(li)
         keyboard = [
         [InlineKeyboardButton( f"{lin}")]
         ]
