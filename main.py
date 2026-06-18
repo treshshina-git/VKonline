@@ -296,7 +296,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
     # Кнопок в ряд не более ~3-4, чтобы UI был читабельнее.
     per_row = 2
-    for ch in channels:
+    for j, ch in channels:
         ch_id = ch.get("channel").get("url")
         name = trim_30(ch.get("channel").get("nick"))
         if not ch_id:
@@ -312,7 +312,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             InlineKeyboardButton(text=name or "Канал")
         )
 
-        if (i + 1) % per_row == 0:
+        if (j + 1) % per_row == 0:
             channel_buttons.append(current_row)
             current_row = []
 
