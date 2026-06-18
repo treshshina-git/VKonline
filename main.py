@@ -314,14 +314,6 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
 
         
 
-
-    if current_row:
-        channel_buttons.append(current_row)
-
-        # 1 кнопка в строке (чтобы не упираться в лимиты Telegram)
-
-        current_row = []
-
     keyboard = InlineKeyboardMarkup(
         channel_buttons + [
             [
