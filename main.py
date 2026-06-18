@@ -245,9 +245,9 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
     lines: List[str] = []
     for idx, ch in enumerate(channels, start=1):
         # Пытаемся угадать поля.
-        name = trim_30(ch.get("name") or ch.get("title") or ch.get("channel_name") or "Канал")
-        ch_id = ch.get("id") or ch.get("channel_id")
-        stream_info = ch.get("description") or ch.get("subtitle") or ch.get("meta")
+        name = trim_30(ch.get("channel").get("nick"))
+        ch_id = ch.get("channel").get("url")
+        stream_info = ch.get("stream").get("title")
 
         line = f"{idx}. {name}"
         if stream_info:
