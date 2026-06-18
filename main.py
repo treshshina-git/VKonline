@@ -270,21 +270,20 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         stream_info = trim_30(ch.get("stream").get("title"))
         viewers = ch.get("stream").get("counters").get("viewers")
         line = f"{viewers} |    <b>{name}</b>\n"
+        # для web app будем открывать /play?urik=<ch_id> внутри Telegram
         if ch_id is not None:
             urik = "https://live.vkvideo.ru/" + ch_id
-            #line += " -> <a href=\"" + urik + "\" >URL</a>"
         else:
             urik = "https://live.vkvideo.ru/"
+
         if stream_info:
             stream_info = str(stream_info)
-            # не делаем огромные сообщения
             if len(stream_info) > 120:
                 stream_info = stream_info[:117] + "..."
-            line += f" <a href=\"" + urik + "\" >" + stream_info + "</a> "
+            line += f"\n{stream_info}"
 
-
-    
         lines.append(line)
+
 
     text = "\n".join(lines)
     #print(text)
@@ -298,13 +297,52 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         ]
     )
 
+    # base URL вашего webapp (должен быть https)
+    WEBAPP_BASE_URL = "https://vkonline-production.up.railway.app"
+
+    # Вырежем HTML-теги, чтобы не было «полузакликаных» ссылок
+    text = text.replace("<a ", "").replace("</a>", "")
+
+    import urllib.parse
+
+    # Кнопки для КАЖДОГО канала: передаём urik в web_app.url
+    # На фронте webapp/public/index.html используется query param urik.
+    channel_buttons: List[List[InlineKeyboardButton]] = []
+    current_row: List[InlineKeyboardButton] = []
+
+    for ch in channels:
+        ch_id = ch.get("channel").get("url")
+        name = trim_30(ch.get("channel").get("nick"))
+        if not ch_id:
+            continue
+
+        urik = "https://live.vkvideo.ru/" + ch_id
+        encoded_urik = urllib.parse.quote(urik, safe="")
+        webapp_url = f"{WEBAPP_BASE_URL}/?play=1&urik={encoded_urik}"
+
+        current_row.append(
+            InlineKeyboardButton(text=name or "Канал", web_app={"url": webapp_url})
+        )
+
+        # 1 кнопка в строке (чтобы не упираться в лимиты Telegram)
+        channel_buttons.append(current_row)
+        current_row = []
+
+    keyboard = InlineKeyboardMarkup(
+        channel_buttons + [
+            [
+                InlineKeyboardButton(text="Назад", callback_data="back_to_categories"),
+                InlineKeyboardButton(text="Обновить", callback_data=refresh_payload),
+            ]
+        ]
+    )
+
     await query.message.reply_text(
         text,
         reply_markup=keyboard,
         disable_web_page_preview=True,
-        parse_mode="HTML",
     )
-    #return InlineKeyboardMarkup(text)
+
 
 
 

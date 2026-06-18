@@ -1,11 +1,8 @@
-- [x] Изучить текущую реализацию `show_channels_for_category` и `on_callback`
-- [x] Добавить кнопки `Назад` и `Обновить` в UI функции `show_channels_for_category`
+## TODO (VKonline) — WebApp открытие внутри Telegram
 
-- [x] Реализовать обработку callback’ов `back_to_categories` и `refresh_channels|...` в `on_callback`
+- [x] Исправить бот: заменить HTML-ссылки на InlineKeyboardButton с `web_app`. (частично/позже проверим)
+- [ ] Добавить webapp/public/index.html: чтение параметра `urik` и открытие iframe на `/play?urik=...`.
+- [ ] Прописать в боте корректный `web_app` URL (нужен публичный base URL webapp с https).
 
-- [x] Проверить синтаксис/запуск: `python -m py_compile main.py`
-
-- [x] Обновить прогресс в этом файле
-
-- [ ] Переделать вывод так, чтобы по «urik» можно было запускать видео (кнопка/редирект), если url — только хвост
+- [ ] Протестировать: открыть /start → категории → канал → убедиться, что открывается внутри Telegram.
 
