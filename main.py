@@ -258,7 +258,8 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             line += f" — {stream_info}"
 
         if ch_id is not None:
-            line += ""
+            urik = "https://live.vkvideo.ru/" + ch_id
+            line += " -> " + urik
 
         lines.append(line)
 
