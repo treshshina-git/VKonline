@@ -156,13 +156,13 @@ def build_categories_keyboard(categories: List[Dict[str, Any]]) -> InlineKeyboar
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("Нажми, чтобы получить список категорий:")
+    #await update.message.reply_text("Нажми, чтобы получить список категорий:")
 
     # Проставим кнопку как отдельное сообщение: пользовательский UX.
     keyboard = InlineKeyboardMarkup(
         [[InlineKeyboardButton(text="Показать категории", callback_data="show_categories")]]
     )
-    await update.message.reply_text("Действие:", reply_markup=keyboard)
+    #await update.message.reply_text("Действие:", reply_markup=keyboard)
 
 
 async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
