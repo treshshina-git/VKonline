@@ -1,14 +1,12 @@
 import logging
 import os, base64
-from pydoc import text
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import httpx
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+
 
 logger = logging.getLogger(__name__)
 
@@ -108,13 +106,13 @@ async def get_online_channels(
     
     url = f"{APIDEV_BASE_URL}/v1/catalog/online_channels"
     params={
-        "limit": 50,
-        "offset": 0,
+        "limit": limit,
+        "offset": offset,
         "category_id": category_id,
         "all_streams": True,
-        "has_vk_video": False,
+        "has_vk_video": has_vk_video,
         "category_type": "irl, sport, game",
-        "all_streams": True,
+        "all_streams": all_streams,
     }
 
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
@@ -280,7 +278,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
     # Вырежем HTML-теги, чтобы не было «полузакликаных» ссылок
     #text = text.replace("<a ", "").replace("</a>", "")
 
-    import urllib.parse
+    #import urllib.parse
 
     # Кнопки для КАЖДОГО канала: передаём urik в web_app.url
     # На фронте webapp/public/index.html используется query param urik.
