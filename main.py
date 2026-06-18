@@ -106,13 +106,13 @@ async def get_online_channels(
 ) -> List[Dict[str, Any]]:
     url = f"{APIDEV_BASE_URL}/v1/catalog/online_channels"
     params={
-            "limit": 50,
-            "offset": 0,
-            "category_id": section_id,
-            "all_streams": True,
-            "has_vk_video": False,
-            "category_type": "irl",
-            "all_streams": True,
+        "limit": 50,
+        "offset": 0,
+        "category_id": section_id,
+        "all_streams": True,
+        "has_vk_video": False,
+        "category_type": "irl",
+        "all_streams": True,
     }
 
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
