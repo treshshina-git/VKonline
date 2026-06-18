@@ -5,7 +5,11 @@ from typing import Any, Dict, List, Optional
 import httpx
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
-
+from fastapi import FastAPI
+app = FastAPI()
+@app.get("/")
+async def root():
+    return {"Hello": "World!"}
 logger = logging.getLogger(__name__)
 
 print("Starting bot...") 
