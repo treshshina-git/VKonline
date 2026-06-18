@@ -4,10 +4,11 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.constants import ParseMode
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
 
+from fastapi import FastAPI
 
+app = FastAPI()
 logger = logging.getLogger(__name__)
 
 print("Starting bot...") 
