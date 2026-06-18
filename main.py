@@ -269,7 +269,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         ch_id = ch.get("channel").get("url")
         stream_info = ch.get("stream").get("title")
         viewers = ch.get("stream").get("counters").get("viewers")
-        line = f"{viewers} | <b>{name}</b>"
+        line = f"{viewers} |    <b>{name}</b>\n"
         if stream_info:
             stream_info = str(stream_info)
             # не делаем огромные сообщения
