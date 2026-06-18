@@ -6,7 +6,6 @@ import httpx
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
 
-app = Application()
 logger = logging.getLogger(__name__)
 
 print("Starting bot...") 
