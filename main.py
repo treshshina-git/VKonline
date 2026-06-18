@@ -280,7 +280,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             # не делаем огромные сообщения
             if len(stream_info) > 120:
                 stream_info = stream_info[:117] + "..."
-            line += f" <a href=\"" + urik + "\" > {stream_info}</a> "
+            line += f" <a href=\"" + urik + "\" >" + stream_info + "</a> "
 
 
     
