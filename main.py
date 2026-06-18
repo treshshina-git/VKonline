@@ -262,8 +262,10 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             line += " -> " + urik
     
         lines.append(line)
-    print(lines)
-    await query.message.reply_text(lines)
+
+    text = "\n".join(lines)
+    print(text)
+    await query.message.reply_text(text)
     #return InlineKeyboardMarkup(text)
 
 
