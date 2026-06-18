@@ -104,15 +104,16 @@ async def get_online_channels(
     has_vk_video: bool = True,
     all_streams: bool = False,
 ) -> List[Dict[str, Any]]:
+    
     url = f"{APIDEV_BASE_URL}/v1/catalog/online_channels"
     params={
-        "limit": 50,
-        "offset": 0,
-        "category_id": section_id,
-        "all_streams": True,
-        "has_vk_video": False,
-        "category_type": "irl",
-        "all_streams": True,
+            "limit": 50,
+            "offset": 0,
+            "category_id": category_id,
+            "all_streams": True,
+            "has_vk_video": False,
+            "category_type": "irl",
+            "all_streams": True,
     }
 
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
@@ -219,7 +220,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         limit = 200
 
     offset = int(context.bot_data.get("channels_offset", 0))
-
+    categoryid = category_id
     async with httpx.AsyncClient() as client:
         token = await fetch_token(client)
         channels = await get_online_channels(
@@ -227,11 +228,12 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             token,
             limit=limit,
             offset=offset,
-            category_id=category_id,
+            category_id=categoryid,
             category_type=category_type,
             has_vk_video=True,
             all_streams=False,
         )
+        print(channels)
 
     if not channels:
         await query.message.reply_text("Каналы по этой категории не найдены.")
