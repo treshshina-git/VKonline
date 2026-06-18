@@ -162,7 +162,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = InlineKeyboardMarkup(
         [[InlineKeyboardButton(text="Показать категории", callback_data="show_categories")]]
     )
-    #await update.message.reply_text("Действие:", reply_markup=keyboard)
+    await update.message.reply_text("Действие:", reply_markup=keyboard)
 
 
 async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
