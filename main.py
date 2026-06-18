@@ -1,5 +1,6 @@
 import logging
 import os, base64
+from pydoc import text
 from typing import Any, Dict, List, Optional, Tuple
 
 import httpx
@@ -313,7 +314,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
             ]
         ]
     )
-
+    text = "123"
     await query.message.reply_text(
         text,
         reply_markup=keyboard,
