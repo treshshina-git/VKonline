@@ -107,13 +107,13 @@ async def get_online_channels(
     
     url = f"{APIDEV_BASE_URL}/v1/catalog/online_channels"
     params={
-            "limit": 50,
-            "offset": 0,
-            "category_id": category_id,
-            "all_streams": True,
-            "has_vk_video": False,
-            "category_type": "irl",
-            "all_streams": True,
+        "limit": 50,
+        "offset": 0,
+        "category_id": category_id,
+        "all_streams": True,
+        "has_vk_video": False,
+        "category_type": "irl",
+        "all_streams": True,
     }
 
     r = await client.get(url, params=params, headers={"Authorization": f"Bearer {token}"}, timeout=30)
@@ -138,7 +138,7 @@ def build_categories_keyboard(categories: List[Dict[str, Any]]) -> InlineKeyboar
         name = trim_30(c.get("name") or c.get("title") or c.get("category_name") or "Категория")
         category_id = str(c.get("category_id") or c.get("id") or "")
         category_type = str(c.get("category_type") or c.get("type") or "")
-
+        
         if not category_id:
             # пропустим странные элементы
             continue
@@ -264,7 +264,7 @@ async def show_channels_for_category(query, context: ContextTypes.DEFAULT_TYPE, 
         lines.append(line)
 
     text = "\n".join(lines)
-    await query.message.reply_text(text)
+    await query.message.reply_text(text, reply_markup=keyboard)
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -285,7 +285,7 @@ def main() -> None:
     # Параметры по умолчанию.
     application.bot_data["categories_limit"] = 10
     application.bot_data["categories_offset"] = 0
-    application.bot_data["channels_limit"] = 50
+    application.bot_data["channels_limit"] = 10
     application.bot_data["channels_offset"] = 0
 
     application.run_polling(close_loop=False)
